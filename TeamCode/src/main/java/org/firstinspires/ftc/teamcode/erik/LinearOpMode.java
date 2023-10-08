@@ -30,68 +30,52 @@
 package org.firstinspires.ftc.teamcode.erik;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+
 /**
- * This file contains an example of an iterative (Non-Linear) "OpMode".
- * An OpMode is a 'program' that runs in either the autonomous or the teleop period of an FTC match.
- * The names of OpModes appear on the menu of the FTC Driver Station.
- * When a selection is made from the menu, the corresponding OpMode
+ * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
+ * the autonomous or the teleop period of an FTC match. The names of OpModes appear on the menu
+ * of the FTC Driver Station. When a selection is made from the menu, the corresponding OpMode
  * class is instantiated on the Robot Controller and executed.
+ *
+ * This particular OpMode just executes a basic Tank Drive Teleop for a two wheeled robot
+ * It includes all the skeletal structure that all linear OpModes contain.
+ *
+ * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
+ * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
-@TeleOp(name="IterativeOpMode", group="OpMode Templates")
+
+@TeleOp(name="Linear OpMode Template", group="OpMode Templates")
 @Disabled
-public class IterativeOpMode extends OpMode
-{
+public class LinearOpMode extends com.qualcomm.robotcore.eventloop.opmode.LinearOpMode {
+
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
 
 
-    /**
-     * Code to run ONCE when the driver hits INIT
-     */
     @Override
-    public void init() {
-
+    public void runOpMode() {
         telemetry.addData("Status", "Initialized");
-    }
+        telemetry.update();
 
-    /**
-     * Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY
-     */
-    @Override
-    public void init_loop() {
+        // Initialize the hardware variables.
 
-    }
 
-    /**
-     * Code to run ONCE when the driver hits PLAY
-     */
-    @Override
-    public void start() {
+
+        // Wait for the game to start (driver presses PLAY)
+        waitForStart();
         runtime.reset();
+
+        // Run until the end of the match (driver presses STOP)
+        while (opModeIsActive()) {
+
+            // Show the elapsed game time and wheel power.
+            telemetry.addData("Status", "Run Time: " + runtime.toString());
+            telemetry.update();
+        }
     }
-
-    /**
-     * Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
-     */
-    @Override
-    public void loop() {
-
-        // Show telemetry
-        telemetry.addData("Status", "Run Time: " + runtime.toString());
-    }
-
-    /**
-     * Code to run ONCE after the driver hits STOP
-     */
-    @Override
-    public void stop() {
-
-    }
-
 }
