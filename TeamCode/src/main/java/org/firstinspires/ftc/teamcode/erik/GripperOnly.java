@@ -34,6 +34,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
@@ -43,17 +44,19 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * When a selection is made from the menu, the corresponding OpMode
  * class is instantiated on the Robot Controller and executed.
  */
-@TeleOp(name="LiftArmOnly", group="Erik")
+@TeleOp(name="GripperOnly", group="Erik")
 //@Disabled
 @Config
-public class LiftArmOnly extends OpMode
+public class GripperOnly extends OpMode
 {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor liftMotor, armMotor ;
 
-    public static int LIFT_POSITION  = 0 ;
-    public static int ARM_POSITION  = 0 ;
+    private Servo gripperGrip, gripperRotate ;
+
+    public static double GRIPPER_GRIP_POSITION  = 0.55 ;
+    public static double GRIPPER_ROTATE_POSITION  = 0.5 ;
 
 
     /**
@@ -61,19 +64,8 @@ public class LiftArmOnly extends OpMode
      */
     @Override
     public void init() {
-        liftMotor = hardwareMap.get(DcMotor.class, "liftMotor") ;
-        liftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        liftMotor.setTargetPosition(0);
-        liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        liftMotor.setPower(1);
-
-        armMotor = hardwareMap.get(DcMotor.class, "armMotor") ;
-        armMotor.setDirection(DcMotorSimple.Direction.REVERSE) ;
-        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        armMotor.setTargetPosition(0);
-        armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        armMotor.setPower(0.8);
+        gripperGrip = hardwareMap.get(Servo.class, "gripperGrip") ;
+        gripperRotate = hardwareMap.get(Servo.class, "gripperRotate") ;
 
         telemetry.addData("Status", "Initialized");
     }
@@ -99,8 +91,8 @@ public class LiftArmOnly extends OpMode
      */
     @Override
     public void loop() {
-        liftMotor.setTargetPosition(LIFT_POSITION);
-        armMotor.setTargetPosition(ARM_POSITION);
+        gripperGrip.setPosition(GRIPPER_GRIP_POSITION);
+        gripperRotate.setPosition(GRIPPER_ROTATE_POSITION);
         // Show telemetry
         telemetry.addData("Status", "Run Time: " + runtime.toString());
     }
@@ -110,12 +102,7 @@ public class LiftArmOnly extends OpMode
      */
     @Override
     public void stop() {
-        liftMotor.setTargetPosition(0);
-        liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        liftMotor.setPower(0);
-        armMotor.setTargetPosition(0);
-        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        armMotor.setPower(0);
+
     }
 
 }
