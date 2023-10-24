@@ -7,12 +7,10 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.TankDrive;
-import org.firstinspires.ftc.teamcode.tuning.TuningOpModes;
 
 
-@TeleOp(name="Road Runner Test 01", group="Erik CenterStage")
-public final class RoadRunnerTest01 extends LinearOpMode {
+@TeleOp(name="Road Runner Test 02", group="Erik CenterStage")
+public final class RoadRunnerTest02 extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         ErikCenterstageRobot robot = new ErikCenterstageRobot(this) ;
@@ -32,4 +30,6 @@ public final class RoadRunnerTest01 extends LinearOpMode {
                     .build());
 
     }
+
+
 }

@@ -19,11 +19,13 @@ public class ErikCenterstageRobot {
     public static int ARM_MAX  = 1660 ;  // Max = 1660
     public double gripperGripPosition = 0.55 ;
     public static double GRIPPER_GRIP_POSITION  = 0.55 ;
-    public static double GRIPPER_CLOSE  = 0.7 ;
-    public static double GRIPPER_OPEN  = 0.55 ;
-    public double gripperRotatePosition = 0.5 ;
-    public static double GRIPPER_ROTATE_POSITION  = 0.5 ;
-
+    public static double GRIPPER_CLOSE  = 0.75 ;
+    public static double GRIPPER_OPEN  = 0.9 ;
+    public double gripperRotatePosition = 0.47 ;
+    public static double GRIPPER_ROTATE_POSITION  = 0.47 ;
+    public static double GRIPPER_ROTATE_EXTENDED  = 0.575 ;
+    public static double GRIPPER_ROTATE_INTAKE  = 0.525 ;
+    public static double GRIPPER_ROTATE_UP  = 0.47 ;
 
 
     // Execute this constructor during the init phase of the opMode ============================
@@ -76,18 +78,20 @@ public class ErikCenterstageRobot {
         liftMotor.setTargetPosition(liftPosition);
         armMotor.setTargetPosition(armPosition);
         gripperGrip.setPosition(gripperGripPosition);
-        gripperRotate.setPosition(GRIPPER_ROTATE_POSITION);
+        gripperRotate.setPosition(gripperRotatePosition);
     }
 
     public void armRaise() {
         liftPosition = LIFT_MAX ;
         armPosition = ARM_MAX ;
+        gripperRotatePosition = GRIPPER_ROTATE_EXTENDED ;
         updatePayload() ;
     }
 
     public void armLower() {
         liftPosition = 0 ;
         armPosition = 0 ;
+        gripperRotatePosition = GRIPPER_ROTATE_INTAKE ;
         updatePayload() ;
     }
 
@@ -113,12 +117,23 @@ public class ErikCenterstageRobot {
         gripClose() ;
         waitForTime(0.5) ;
         armRaise() ;
+        updatePayload() ;
+    }
+
+    public void gripAndStore() {
+        gripClose() ;
+        waitForTime(0.5) ;
+        //armLower() ;
+        gripperRotatePosition = GRIPPER_ROTATE_UP ;
+        updatePayload() ;
     }
 
     public void releaseAndDrop () {
         gripOpen() ;
         waitForTime(0.5) ;
+        gripperRotatePosition = GRIPPER_ROTATE_INTAKE ;
         armLower() ;
+        updatePayload() ;
     }
 
     //Wait for a period of time (seconds)
