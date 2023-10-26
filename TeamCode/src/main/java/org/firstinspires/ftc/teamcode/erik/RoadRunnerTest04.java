@@ -37,7 +37,7 @@ public final class RoadRunnerTest04 extends LinearOpMode {
                 .waitSeconds(2)
                 .build());
 
-        robot.armLower();
+        robot.releaseAndDrop();
 
         while(this.opModeIsActive()) {}
     }

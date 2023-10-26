@@ -11,21 +11,34 @@ public class ErikCenterstageRobot {
     private DcMotor liftMotor, armMotor ;
     private Servo gripperGrip, gripperRotate ;
     private OpMode opMode ;
-    public int liftPosition = 0 ;
+
     public static int LIFT_POSITION  = 0 ;  // Max = 1850
     public static int LIFT_MAX  = 1850 ;  // Max = 1850
-    public int armPosition = 0 ;
     public static int ARM_POSITION  = 0 ;  // Max = 1660
     public static int ARM_MAX  = 1660 ;  // Max = 1660
-    public double gripperGripPosition = 0.55 ;
-    public static double GRIPPER_GRIP_POSITION  = 0.55 ;
-    public static double GRIPPER_CLOSE  = 0.75 ;
+    public static double GRIPPER_GRIP_POSITION  = 0.9 ;
+    public static double GRIPPER_CLOSE  = 0.71 ;
     public static double GRIPPER_OPEN  = 0.9 ;
-    public double gripperRotatePosition = 0.47 ;
-    public static double GRIPPER_ROTATE_POSITION  = 0.47 ;
+    public static double GRIPPER_ROTATE_POSITION  = 0.525 ;
     public static double GRIPPER_ROTATE_EXTENDED  = 0.575 ;
     public static double GRIPPER_ROTATE_INTAKE  = 0.525 ;
     public static double GRIPPER_ROTATE_UP  = 0.47 ;
+
+
+    public double gripperGripPosition = 0.9 ;
+    public double gripperRotatePosition = 0.525 ;
+    public int armPosition = 0 ;
+    public int liftPosition = 0 ;
+
+    // These are the constants used by algorithms. You can modify them live in Dashboard.
+    public static double[] GRIPPER_ROTATE_INTAKE_POS = { 0.525, 0.615 } ;  // Min: 0, Max: 1
+    public static double[] GRIPPER_ROTATE_STORE_POS = { 0.47, 0.565 } ;  // Min: 0, Max: 1
+    public static double[] GRIPPER_ROTATE_DELIVER_POS = { 0.488, 0.575 } ;  // Min: 0, Max: 1
+    public static int[] ARM_POSITIONS = { 0, 800, 1000, 1200, 1400, 1660 } ;  // Min: 0, Max: 5
+    public static int[] LIFT_POSITIONS = { 0, 800, 1000, 1200, 1400, 1850 } ;  // Min: 0, Max: 5
+
+    public enum GripperState {STORE, INTAKE, DELIVER } ;
+    public static GripperState gripperState = GripperState.INTAKE ;
 
 
     // Execute this constructor during the init phase of the opMode ============================
@@ -141,6 +154,39 @@ public class ErikCenterstageRobot {
         double startTime = opMode.getRuntime();
         while (IsTimeUp(startTime,time)){
             update() ;
+        }
+    }
+
+    public void updateRaw() {
+        // For opmodes that are used to find the min/max and positional values for the payload.
+        gripperGrip.setPosition(GRIPPER_GRIP_POSITION);
+        gripperRotate.setPosition(GRIPPER_ROTATE_POSITION);
+        liftMotor.setTargetPosition(LIFT_POSITION);
+        armMotor.setTargetPosition(ARM_POSITION);
+    }
+
+    public void updateInterlock() {
+        // For opmodes that are used to find the min/max and positional values for the payload.
+        gripperGrip.setPosition(GRIPPER_GRIP_POSITION);
+        liftMotor.setTargetPosition(LIFT_POSITION);
+        armMotor.setTargetPosition(ARM_POSITION);
+
+        switch (gripperState) {
+            case STORE:
+                gripperRotate.setPosition(GRIPPER_ROTATE_STORE_POS[0] + ((double) ARM_POSITION / (double) ARM_POSITIONS[5]) * (GRIPPER_ROTATE_STORE_POS[1] - GRIPPER_ROTATE_STORE_POS[0]));
+                opMode.telemetry.addData("Gripper Rotate Position:   ",
+                        GRIPPER_ROTATE_STORE_POS[0] + ((double) ARM_POSITION / (double) ARM_POSITIONS[5]) * (GRIPPER_ROTATE_STORE_POS[1] - GRIPPER_ROTATE_STORE_POS[0]));
+                break ;
+            case DELIVER:
+                gripperRotate.setPosition(GRIPPER_ROTATE_DELIVER_POS[0] + ((double) ARM_POSITION / (double) ARM_POSITIONS[5]) * (GRIPPER_ROTATE_DELIVER_POS[1] - GRIPPER_ROTATE_DELIVER_POS[0]));
+                opMode.telemetry.addData("Gripper Rotate Position:   ",
+                        GRIPPER_ROTATE_DELIVER_POS[0] + ((double) ARM_POSITION / (double) ARM_POSITIONS[5]) * (GRIPPER_ROTATE_DELIVER_POS[1] - GRIPPER_ROTATE_DELIVER_POS[0]));
+                break ;
+            default:
+                gripperRotate.setPosition(GRIPPER_ROTATE_INTAKE_POS[0] + ((double) ARM_POSITION / (double) ARM_POSITIONS[5]) * (GRIPPER_ROTATE_INTAKE_POS[1] - GRIPPER_ROTATE_INTAKE_POS[0]));
+                opMode.telemetry.addData("Gripper Rotate Position:   ",
+                        GRIPPER_ROTATE_INTAKE_POS[0] + ((double) ARM_POSITION / (double) ARM_POSITIONS[5]) * (GRIPPER_ROTATE_INTAKE_POS[1] - GRIPPER_ROTATE_INTAKE_POS[0]));
+                break ;
         }
     }
 
