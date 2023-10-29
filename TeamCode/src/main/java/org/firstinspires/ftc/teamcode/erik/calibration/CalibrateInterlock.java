@@ -32,27 +32,26 @@ package org.firstinspires.ftc.teamcode.erik;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
- * This file contains an example of an iterative (Non-Linear) "OpMode".
- * An OpMode is a 'program' that runs in either the autonomous or the teleop period of an FTC match.
- * The names of OpModes appear on the menu of the FTC Driver Station.
- * When a selection is made from the menu, the corresponding OpMode
- * class is instantiated on the Robot Controller and executed.
+ * This is an iterative OpMode used to set the values used to calculate
+ * the rotational position of the gripper (the wrist).
+ * The rotation depends on the arm rotational position and the
+ * desired position, relative to the ground (INTAKE, STORE, DELIVER).
  */
-@TeleOp(name="Calibrate Payload", group="Erik")
+@TeleOp(name="Calibrate Interlock", group="Erik Calibrate")
 //@Disabled
 @Config
-public class CalibratePayload extends OpMode
+public class CalibrateInterlock extends OpMode
 {
     // Declare OpMode members.
-    private ElapsedTime runtime = new ElapsedTime();
+    public static int LIFT_POSITION  = 0 ;  // Max = 1850
+    public static int ARM_POSITION  = 0 ;  // Max = 1660
+    public static double GRIPPER_GRIP_POSITION  = 0.9 ;  // Open=0.9, Close=0.71
+    public static double GRIPPER_ROTATE_POSITION  = 0.525 ;
 
     ErikCenterstageRobot robot ;
-
 
     /**
      * Code to run ONCE when the driver hits INIT
@@ -76,7 +75,7 @@ public class CalibratePayload extends OpMode
      */
     @Override
     public void start() {
-        runtime.reset();
+
     }
 
     /**
@@ -84,9 +83,10 @@ public class CalibratePayload extends OpMode
      */
     @Override
     public void loop() {
-        robot.updateRaw();
+        robot.updateRaw(GRIPPER_GRIP_POSITION, GRIPPER_ROTATE_POSITION, ARM_POSITION, LIFT_POSITION );
+        robot.updateInterlock();
         // Show telemetry
-        telemetry.addData("Status", "Run Time: " + runtime.toString());
+        telemetry.addData("Status", "Running" );
     }
 
     /**

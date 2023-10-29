@@ -29,11 +29,12 @@
 
 package org.firstinspires.ftc.teamcode.erik;
 
-import com.arcrobotics.ftclib.gamepad.GamepadEx;
-import com.arcrobotics.ftclib.gamepad.GamepadKeys;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
@@ -43,21 +44,27 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * When a selection is made from the menu, the corresponding OpMode
  * class is instantiated on the Robot Controller and executed.
  */
-@TeleOp(name="CenterStage Teleop", group="Erik CenterStage")
-public class CenterStageTeleop extends OpMode
+@TeleOp(name="GripperOnly", group="Erik Calibration")
+//@Disabled
+@Config
+public class GripperOnly extends OpMode
 {
     // Declare OpMode members.
-    private ElapsedTime runtime = new ElapsedTime();
-    private ErikCenterstageRobot robot ;
-    private GamepadEx controller ;
+    private DcMotor liftMotor, armMotor ;
+
+    private Servo gripperGrip, gripperRotate ;
+
+    public static double GRIPPER_GRIP_POSITION  = 0.55 ;
+    public static double GRIPPER_ROTATE_POSITION  = 0.5 ;
+
 
     /**
      * Code to run ONCE when the driver hits INIT
      */
     @Override
     public void init() {
-        robot = new ErikCenterstageRobot(this) ;
-        controller = new GamepadEx(gamepad1);   // Instantiate the gamepad
+        gripperGrip = hardwareMap.get(Servo.class, "gripperGrip") ;
+        gripperRotate = hardwareMap.get(Servo.class, "gripperRotate") ;
 
         telemetry.addData("Status", "Initialized");
     }
@@ -75,8 +82,7 @@ public class CenterStageTeleop extends OpMode
      */
     @Override
     public void start() {
-        runtime.reset();
-        robot.updatePayload();
+
     }
 
     /**
@@ -84,13 +90,10 @@ public class CenterStageTeleop extends OpMode
      */
     @Override
     public void loop() {
-        controller.readButtons();
-        if (controller.wasJustReleased(GamepadKeys.Button.DPAD_UP)) { robot.gripAndGo(); }
-        else if (controller.wasJustReleased(GamepadKeys.Button.DPAD_DOWN)) { robot.releaseAndDrop(); }
-        else if (controller.wasJustReleased(GamepadKeys.Button.A)) { robot.armDash(); }
-
-        robot.update();
-        telemetry.addData("Status", "Run Time: " + runtime.toString()); // Show telemetry
+        gripperGrip.setPosition(GRIPPER_GRIP_POSITION);
+        gripperRotate.setPosition(GRIPPER_ROTATE_POSITION);
+        // Show telemetry
+        telemetry.addData("Status", "Running...");
     }
 
     /**

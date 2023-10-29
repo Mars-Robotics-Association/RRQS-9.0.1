@@ -29,11 +29,13 @@
 
 package org.firstinspires.ftc.teamcode.erik;
 
-import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.PoseVelocity2d;
+import com.acmerobotics.roadrunner.Vector2d;
+import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
@@ -43,37 +45,21 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * When a selection is made from the menu, the corresponding OpMode
  * class is instantiated on the Robot Controller and executed.
  */
-@TeleOp(name="LiftArmOnly", group="Erik")
-//@Disabled
-@Config
-public class LiftArmOnly extends OpMode
+@TeleOp(name="CenterStage Teleop", group="Erik CenterStage")
+public class CenterStageTeleop extends OpMode
 {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor liftMotor, armMotor ;
-
-    public static int LIFT_POSITION  = 0 ;
-    public static int ARM_POSITION  = 0 ;
-
+    private ErikCenterstageRobot robot ;
+    private GamepadEx controller ;
 
     /**
      * Code to run ONCE when the driver hits INIT
      */
     @Override
     public void init() {
-        liftMotor = hardwareMap.get(DcMotor.class, "liftMotor") ;
-        liftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        liftMotor.setTargetPosition(0);
-        liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        liftMotor.setPower(1);
-
-        armMotor = hardwareMap.get(DcMotor.class, "armMotor") ;
-        armMotor.setDirection(DcMotorSimple.Direction.REVERSE) ;
-        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        armMotor.setTargetPosition(0);
-        armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        armMotor.setPower(0.8);
+        robot = new ErikCenterstageRobot(this) ;
+        controller = new GamepadEx(gamepad1);   // Instantiate the gamepad
 
         telemetry.addData("Status", "Initialized");
     }
@@ -92,6 +78,7 @@ public class LiftArmOnly extends OpMode
     @Override
     public void start() {
         runtime.reset();
+        robot.updatePayload();
     }
 
     /**
@@ -99,23 +86,27 @@ public class LiftArmOnly extends OpMode
      */
     @Override
     public void loop() {
-        liftMotor.setTargetPosition(LIFT_POSITION);
-        armMotor.setTargetPosition(ARM_POSITION);
-        // Show telemetry
-        telemetry.addData("Status", "Run Time: " + runtime.toString());
+        robot.drive.setDrivePowers(new PoseVelocity2d( new Vector2d( -gamepad1.left_stick_y, -gamepad1.left_stick_x ), -gamepad1.right_stick_x ));
+        controller.readButtons();
+        if (controller.wasJustReleased(GamepadKeys.Button.DPAD_UP))  robot.gripAndGo() ;
+        else if (controller.wasJustReleased(GamepadKeys.Button.DPAD_DOWN))  robot.releaseAndDrop() ;
+        else if (controller.wasJustReleased(GamepadKeys.Button.DPAD_RIGHT))  robot.gripperState = ErikCenterstageRobot.GripperState.INTAKE ;
+        else if (controller.wasJustReleased(GamepadKeys.Button.DPAD_LEFT))  robot.gripperState = ErikCenterstageRobot.GripperState.STORE ;
+        else if (controller.wasJustReleased(GamepadKeys.Button.A)) {  }
+        else if (controller.wasJustReleased(GamepadKeys.Button.LEFT_BUMPER))  robot.gripOpen() ;
+        else if (controller.wasJustReleased(GamepadKeys.Button.RIGHT_BUMPER))  robot.gripClose() ;
+
+        robot.update();
+        telemetry.addData("Status", "Run Time: " + runtime.toString()); // Show telemetry
     }
+
 
     /**
      * Code to run ONCE after the driver hits STOP
      */
     @Override
     public void stop() {
-        liftMotor.setTargetPosition(0);
-        liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        liftMotor.setPower(0);
-        armMotor.setTargetPosition(0);
-        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        armMotor.setPower(0);
+
     }
 
 }
