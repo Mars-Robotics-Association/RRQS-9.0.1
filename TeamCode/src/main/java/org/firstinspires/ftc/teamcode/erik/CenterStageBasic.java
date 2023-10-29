@@ -29,11 +29,11 @@
 
 package org.firstinspires.ftc.teamcode.erik;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -45,10 +45,12 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * When a selection is made from the menu, the corresponding OpMode
  * class is instantiated on the Robot Controller and executed.
  */
-@TeleOp(name="CenterStage Teleop", group="Erik CenterStage")
-public class CenterStageTeleop extends OpMode
+@TeleOp(name="CenterStage Basic Demo", group="Erik CenterStage")
+@Config
+public class CenterStageBasic extends OpMode
 {
     // Declare OpMode members.
+    public static int INTAKE_LEVEL = 0 ;
     private ElapsedTime runtime = new ElapsedTime();
     private ErikCenterstageRobot robot ;
     private GamepadEx controller ;
@@ -90,14 +92,26 @@ public class CenterStageTeleop extends OpMode
         controller.readButtons();
         if (controller.wasJustReleased(GamepadKeys.Button.DPAD_UP))  robot.gripAndGo() ;
         else if (controller.wasJustReleased(GamepadKeys.Button.DPAD_DOWN))  robot.releaseAndDrop() ;
-        else if (controller.wasJustReleased(GamepadKeys.Button.DPAD_RIGHT))  robot.gripperState = ErikCenterstageRobot.GripperState.INTAKE ;
-        else if (controller.wasJustReleased(GamepadKeys.Button.DPAD_LEFT))  robot.gripperState = ErikCenterstageRobot.GripperState.STORE ;
-        else if (controller.wasJustReleased(GamepadKeys.Button.A)) {  }
+        else if (controller.wasJustReleased(GamepadKeys.Button.DPAD_RIGHT))  {
+            robot.deliveryLevel += 1 ;
+            if (robot.deliveryLevel > 5) robot.deliveryLevel = 5 ;
+        }
+        else if (controller.wasJustReleased(GamepadKeys.Button.DPAD_LEFT))  {
+            robot.deliveryLevel -= 1 ;
+            if (robot.deliveryLevel < 0) robot.deliveryLevel = 0 ;
+        }
+        else if (controller.wasJustReleased(GamepadKeys.Button.A)) {
+            if (robot.gripperState== ErikCenterstageRobot.GripperState.INTAKE) robot.gripperState = ErikCenterstageRobot.GripperState.STORE ;
+            else if (robot.gripperState== ErikCenterstageRobot.GripperState.STORE) robot.gripperState = ErikCenterstageRobot.GripperState.INTAKE ;
+        }
         else if (controller.wasJustReleased(GamepadKeys.Button.LEFT_BUMPER))  robot.gripOpen() ;
         else if (controller.wasJustReleased(GamepadKeys.Button.RIGHT_BUMPER))  robot.gripClose() ;
+        else if (controller.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER)> 0.2)  robot.goToIntake(INTAKE_LEVEL) ;
+        else if (controller.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)> 0.2)  robot.gripAndStore();
+
 
         robot.update();
-        telemetry.addData("Status", "Run Time: " + runtime.toString()); // Show telemetry
+        telemetry.addData("Delivery Level: ", robot.deliveryLevel) ;
     }
 
 

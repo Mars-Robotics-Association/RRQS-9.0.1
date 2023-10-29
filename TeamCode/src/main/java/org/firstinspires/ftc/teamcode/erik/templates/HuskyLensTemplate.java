@@ -30,7 +30,7 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
 TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package org.firstinspires.ftc.teamcode.erik;
+package org.firstinspires.ftc.teamcode.erik.templates;
 
 import com.qualcomm.hardware.dfrobot.HuskyLens;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -60,7 +60,7 @@ import java.util.concurrent.TimeUnit;
 public class HuskyLensTemplate extends LinearOpMode {
 
     private final int READ_PERIOD = 1;
-
+    private String myZone = "Middle" ;
     private HuskyLens huskyLens;
 
     @Override
@@ -68,14 +68,14 @@ public class HuskyLensTemplate extends LinearOpMode {
     {
         huskyLens = hardwareMap.get(HuskyLens.class, "huskyLens");
 
-        /*
+        /**
          * This sample rate limits the reads solely to allow a user time to observe
          * what is happening on the Driver Station telemetry.  Typical applications
          * would not likely rate limit.
          */
         Deadline rateLimit = new Deadline(READ_PERIOD, TimeUnit.SECONDS);
 
-        /*
+        /**
          * Immediately expire so that the first time through we'll do the read.
          */
         rateLimit.expire();
@@ -94,7 +94,7 @@ public class HuskyLensTemplate extends LinearOpMode {
             telemetry.addData(">>", "Press start to continue");
         }
 
-        /*
+        /**
          * The device uses the concept of an algorithm to determine what types of
          * objects it will look for and/or what mode it is in.  The algorithm may be
          * selected using the scroll wheel on the device, or via software as shown in
@@ -113,7 +113,7 @@ public class HuskyLensTemplate extends LinearOpMode {
         telemetry.update();
         waitForStart();
 
-        /*
+        /**
          * Looking for AprilTags per the call to selectAlgorithm() above.  A handy grid
          * for testing may be found at https://wiki.dfrobot.com/HUSKYLENS_V1.0_SKU_SEN0305_SEN0336#target_20.
          *
@@ -125,7 +125,7 @@ public class HuskyLensTemplate extends LinearOpMode {
             }
             rateLimit.reset();
 
-            /*
+            /**
              * All algorithms, except for LINE_TRACKING, return a list of Blocks where a
              * Block represents the outline of a recognized object along with its ID number.
              * ID numbers allow you to identify what the device saw.  See the HuskyLens documentation
@@ -135,9 +135,16 @@ public class HuskyLensTemplate extends LinearOpMode {
              * Returns an empty array if no objects are seen.
              */
             HuskyLens.Block[] blocks = huskyLens.blocks();
+            if (blocks.length >0) {
+                if (blocks[0].x > 180) myZone = "Right";
+                else if (blocks[0].x < 120) myZone = "Left";
+                else myZone = "Center";
+            }
+
             telemetry.addData("Block count", blocks.length);
             for (int i = 0; i < blocks.length; i++) {
                 telemetry.addData("Block", blocks[i].toString());
+                telemetry.addData("Zone", myZone ) ;
             }
 
             telemetry.update();

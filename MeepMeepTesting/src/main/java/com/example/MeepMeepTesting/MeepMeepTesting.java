@@ -29,16 +29,24 @@ public class MeepMeepTesting {
          */
 
 
-        /*
-        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-34, -64, -Math.PI/2))
+
+        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-34, 62, Math.PI/2))
                 .setReversed(true)
-                .splineTo(new Vector2d(-48, -34), Math.toRadians(120))
+                .splineTo(new Vector2d(-44, 36), Math.toRadians(-120))
                 .setReversed(false)
-                .splineTo(new Vector2d(0, -58), 0)
+                .splineTo(new Vector2d(-20, 58), Math.toRadians(0))
+
+                .splineTo(new Vector2d(13, 36), Math.toRadians(0))
+                .waitSeconds(2)
+
+                .setReversed(true)
+                .splineTo(new Vector2d(-20, 58), Math.toRadians(-180))
+
+                .splineToLinearHeading(new Pose2d(-46, 42, Math.toRadians(-160)), Math.toRadians(0))
+
+                .setReversed(false)
+                .splineTo(new Vector2d(-56, 36), Math.toRadians(-180))
                 .build());
-        */
-
-
 /*
         myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(0, 0, 0))
                 .lineToX(30)

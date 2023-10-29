@@ -34,10 +34,20 @@ public final class RoadRunnerTest04 extends LinearOpMode {
         Actions.runBlocking(
             drive.actionBuilder(drive.pose)
                 .splineTo(new Vector2d(13, 36), Math.toRadians(0))
-                .waitSeconds(2)
+                .waitSeconds(0.5)
                 .build());
 
         robot.releaseAndDrop();
+
+        Actions.runBlocking(
+            drive.actionBuilder(drive.pose)
+                .setReversed(true)
+                .splineTo(new Vector2d(-20, 58), Math.toRadians(-180))
+                .splineToLinearHeading(new Pose2d(-46, 42, Math.toRadians(-160)), Math.toRadians(0))
+                .setReversed(false)
+                .splineTo(new Vector2d(-56, 36), Math.toRadians(-180))
+                .build());
+
 
         while(this.opModeIsActive()) {}
     }

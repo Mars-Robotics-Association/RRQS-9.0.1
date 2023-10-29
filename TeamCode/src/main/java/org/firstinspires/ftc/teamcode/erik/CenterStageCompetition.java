@@ -44,8 +44,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * When a selection is made from the menu, the corresponding OpMode
  * class is instantiated on the Robot Controller and executed.
  */
-@TeleOp(name="CenterStage Basic Demo", group="Erik CenterStage")
-public class CenterStageBasic extends OpMode
+@TeleOp(name="CenterStage Competition", group="Erik CenterStage")
+public class CenterStageCompetition extends OpMode
 {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();

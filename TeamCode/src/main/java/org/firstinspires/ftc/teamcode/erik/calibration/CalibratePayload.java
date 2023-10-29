@@ -27,7 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.erik;
+package org.firstinspires.ftc.teamcode.erik.calibration;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -36,10 +36,12 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.erik.ErikCenterstageRobot;
+
 /**
  * This OpMode is for finding the values of the positions for the: arm, lift, gripper grip and gripper rotation.
  */
-@TeleOp(name="Calibrate Payload", group="Erik")
+@TeleOp(name="Calibrate Payload", group="Erik Calibrate")
 //@Disabled
 @Config
 public class CalibratePayload extends OpMode

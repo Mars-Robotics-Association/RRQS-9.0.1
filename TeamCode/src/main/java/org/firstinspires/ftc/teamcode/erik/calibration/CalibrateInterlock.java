@@ -27,12 +27,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.erik;
+package org.firstinspires.ftc.teamcode.erik.calibration;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.teamcode.erik.ErikCenterstageRobot;
 
 /**
  * This is an iterative OpMode used to set the values used to calculate
@@ -50,6 +52,7 @@ public class CalibrateInterlock extends OpMode
     public static int ARM_POSITION  = 0 ;  // Max = 1660
     public static double GRIPPER_GRIP_POSITION  = 0.9 ;  // Open=0.9, Close=0.71
     public static double GRIPPER_ROTATE_POSITION  = 0.525 ;
+    public static ErikCenterstageRobot.GripperState GRIPPER_STATE = ErikCenterstageRobot.GripperState.INTAKE ;
 
     ErikCenterstageRobot robot ;
 
@@ -83,6 +86,7 @@ public class CalibrateInterlock extends OpMode
      */
     @Override
     public void loop() {
+        robot.gripperState = GRIPPER_STATE ;
         robot.updateRaw(GRIPPER_GRIP_POSITION, GRIPPER_ROTATE_POSITION, ARM_POSITION, LIFT_POSITION );
         robot.updateInterlock();
         // Show telemetry

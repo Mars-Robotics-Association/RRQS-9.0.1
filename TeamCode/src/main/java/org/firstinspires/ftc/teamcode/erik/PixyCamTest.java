@@ -95,7 +95,7 @@ public class PixyCamTest extends OpMode
         controller.readButtons();
         if (controller.wasJustReleased(GamepadKeys.Button.DPAD_UP)) { robot.gripAndGo(); }
         else if (controller.wasJustReleased(GamepadKeys.Button.DPAD_DOWN)) { robot.releaseAndDrop(); }
-        else if (controller.wasJustReleased(GamepadKeys.Button.A)) { robot.armDash(); }
+        else if (controller.wasJustReleased(GamepadKeys.Button.A)) {  }
 
 
         //Now to get data
