@@ -15,6 +15,68 @@ public class MeepMeepTesting {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 13)
                 .build();
 
+        //  prop only
+        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-34, 62, Math.PI/2))
+                .setReversed(true)
+                .splineTo(new Vector2d(-24, 32), Math.toRadians(-60))
+                .setReversed(false)
+                .splineTo(new Vector2d(-20, 58), Math.toRadians(0))
+                .build());
+
+
+
+
+
+
+
+        /*
+        // ======== For full-size field ==================
+
+        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-34, 62, Math.PI/2))
+                .setReversed(true)
+                .splineTo(new Vector2d(-44, 36), Math.toRadians(-120))
+                .setReversed(false)
+
+                .splineTo(new Vector2d(-20, 58), Math.toRadians(0))
+                .splineTo(new Vector2d(0, 58), Math.toRadians(0))
+                .splineTo(new Vector2d(44, 42), Math.toRadians(0))
+                .waitSeconds(2)
+
+                .setReversed(true)
+                .splineTo(new Vector2d(0, 58), Math.toRadians(-180))
+                .splineTo(new Vector2d(-26, 58), Math.toRadians(-180))
+
+                .splineToLinearHeading(new Pose2d(-46, 42, Math.toRadians(-160)), Math.toRadians(0))
+
+                .setReversed(false)
+                .splineTo(new Vector2d(-56, 36), Math.toRadians(-180))
+                .build());
+        */
+
+        /*
+        // ======== For full-size field ====== With regular turn
+        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-34, 62, Math.PI/2))
+                .setReversed(true)
+                .splineTo(new Vector2d(-44, 36), Math.toRadians(-120))
+                .setReversed(false)
+
+                .splineTo(new Vector2d(-20, 58), Math.toRadians(0))
+                .splineTo(new Vector2d(0, 58), Math.toRadians(0))
+                .splineTo(new Vector2d(44, 42), Math.toRadians(0))
+                .waitSeconds(2)
+
+                .setReversed(true)
+                .splineTo(new Vector2d(0, 58), Math.toRadians(-180))
+                .splineTo(new Vector2d(-26, 58), Math.toRadians(-180))
+                .splineTo(new Vector2d(-48, 36), Math.toRadians(-180))
+                .turnTo(0)
+                .setReversed(false)
+                .turn(Math.toRadians(180))
+                .splineTo(new Vector2d(-57, 36), Math.toRadians(-180))
+                .build());
+         */
+
+
 
 
         /*
@@ -30,6 +92,9 @@ public class MeepMeepTesting {
 
 
 
+
+
+        /*  ======= For the home lab
         myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-34, 62, Math.PI/2))
                 .setReversed(true)
                 .splineTo(new Vector2d(-44, 36), Math.toRadians(-120))
@@ -47,6 +112,9 @@ public class MeepMeepTesting {
                 .setReversed(false)
                 .splineTo(new Vector2d(-56, 36), Math.toRadians(-180))
                 .build());
+
+         */
+
 /*
         myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(0, 0, 0))
                 .lineToX(30)

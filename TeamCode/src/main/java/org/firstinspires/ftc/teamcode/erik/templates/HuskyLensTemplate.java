@@ -99,16 +99,14 @@ public class HuskyLensTemplate extends LinearOpMode {
          * objects it will look for and/or what mode it is in.  The algorithm may be
          * selected using the scroll wheel on the device, or via software as shown in
          * the call to selectAlgorithm().
-         *
          * The SDK itself does not assume that the user wants a particular algorithm on
          * startup, and hence does not set an algorithm.
-         *
          * Users, should, in general, explicitly choose the algorithm they want to use
          * within the OpMode by calling selectAlgorithm() and passing it one of the values
          * found in the enumeration HuskyLens.Algorithm.
          */
         //huskyLens.selectAlgorithm(HuskyLens.Algorithm.TAG_RECOGNITION);
-        huskyLens.selectAlgorithm(HuskyLens.Algorithm.OBJECT_TRACKING) ;
+        huskyLens.selectAlgorithm(HuskyLens.Algorithm.COLOR_RECOGNITION) ;
 
         telemetry.update();
         waitForStart();
@@ -116,7 +114,6 @@ public class HuskyLensTemplate extends LinearOpMode {
         /**
          * Looking for AprilTags per the call to selectAlgorithm() above.  A handy grid
          * for testing may be found at https://wiki.dfrobot.com/HUSKYLENS_V1.0_SKU_SEN0305_SEN0336#target_20.
-         *
          * Note again that the device only recognizes the 36h11 family of tags out of the box.
          */
         while(opModeIsActive()) {
@@ -131,7 +128,6 @@ public class HuskyLensTemplate extends LinearOpMode {
              * ID numbers allow you to identify what the device saw.  See the HuskyLens documentation
              * referenced in the header comment above for more information on IDs and how to
              * assign them to objects.
-             *
              * Returns an empty array if no objects are seen.
              */
             HuskyLens.Block[] blocks = huskyLens.blocks();
