@@ -10,16 +10,14 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.internal.system.Deadline;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.erik.ErikCenterstageRobot;
-import com.qualcomm.hardware.dfrobot.HuskyLens;
 
 import java.util.concurrent.TimeUnit;
 
 
-@TeleOp(name="Auto Red Stack Side", group="Erik CenterStage")
-public final class AutoRedStackSide extends LinearOpMode {
+@TeleOp(name="Auto Red Stack Side - Home", group="Erik CenterStage")
+public final class AutoRedStackSideHome extends LinearOpMode {
     private final int READ_PERIOD = 1;
     private String myZone = "Center" ;
-    private double zoneY = 36 ;
     private HuskyLens huskyLens;
 
     @Override
@@ -71,10 +69,8 @@ public final class AutoRedStackSide extends LinearOpMode {
                             .setReversed(true)
                             .splineTo(new Vector2d(-42, 32), Math.toRadians(-120))
                             .setReversed(false)
-                            .splineTo(new Vector2d(-22, 58), Math.toRadians(0))
-                            .splineTo(new Vector2d(0, 58), Math.toRadians(0))
+                            .splineTo(new Vector2d(-20, 58), Math.toRadians(0))
                             .build());
-                zoneY = 32 ;
                 break ;
             case "Left":
                 Actions.runBlocking(
@@ -83,10 +79,8 @@ public final class AutoRedStackSide extends LinearOpMode {
                                 .splineTo(new Vector2d(-27, 32), Math.toRadians(-60))
                                 .setReversed(false)
                                 .splineTo(new Vector2d(-34, 42), Math.toRadians(80))
-                                .splineTo(new Vector2d(-22, 58), Math.toRadians(0))
-                                .splineTo(new Vector2d(0, 58), Math.toRadians(0))
+                                .splineTo(new Vector2d(-20, 58), Math.toRadians(0))
                                 .build());
-                zoneY = 40 ;
                 break ;
             default:
                 Actions.runBlocking(
@@ -94,18 +88,18 @@ public final class AutoRedStackSide extends LinearOpMode {
                                 .setReversed(true)
                                 .splineTo(new Vector2d(-34, 32), Math.toRadians(-90))
                                 .setReversed(false)
-                                .splineTo(new Vector2d(-22, 58), Math.toRadians(0))
-                                .splineTo(new Vector2d(0, 58), Math.toRadians(0))
+                                .splineTo(new Vector2d(-20, 58), Math.toRadians(0))
                                 .build());
-                zoneY = 36 ;
                 break ;
         }
 
-        robot.armRaise(1) ;
+/*
+
+        robot.armRaise() ;
 
         Actions.runBlocking(
             drive.actionBuilder(drive.pose)
-                .splineTo(new Vector2d(48, zoneY), Math.toRadians(0))
+                .splineTo(new Vector2d(13, 36), Math.toRadians(0))
                 .waitSeconds(0.5)
                 .build());
 
@@ -114,18 +108,15 @@ public final class AutoRedStackSide extends LinearOpMode {
         Actions.runBlocking(
             drive.actionBuilder(drive.pose)
                 .setReversed(true)
-                .splineTo(new Vector2d(0, 58), Math.toRadians(-180))
-                .splineTo(new Vector2d(-26, 58), Math.toRadians(-180))
-                .splineTo(new Vector2d(-48, 36), Math.toRadians(-180))
-                .turnTo(0)
+                .splineTo(new Vector2d(-20, 58), Math.toRadians(-180))
+                .splineToLinearHeading(new Pose2d(-46, 42, Math.toRadians(-160)), Math.toRadians(0))
                 .setReversed(false)
-                .turn(Math.toRadians(180))
-                .splineTo(new Vector2d(-57, 36), Math.toRadians(-180))
+                .splineTo(new Vector2d(-56, 36), Math.toRadians(-180))
                 .build());
 
 
 
-
+ */
         while(this.opModeIsActive()) {}
     }
 
