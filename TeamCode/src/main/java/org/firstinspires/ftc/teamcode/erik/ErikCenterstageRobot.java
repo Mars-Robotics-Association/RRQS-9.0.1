@@ -16,23 +16,23 @@ public class ErikCenterstageRobot {
     private OpMode opMode ;
     public MecanumDrive drive ;
 
-    public static double GRIPPER_CLOSE  = 0.67 ;
-    public static double GRIPPER_OPEN  = 0.9 ;
+    public static double GRIPPER_CLOSE  = 0.7 ;
+    public static double GRIPPER_OPEN  = 0.5 ;
     public static int INTAKE_OFFSET = 100 ;
 
     // These are the constants used by algorithms. You can modify them live in Dashboard.
-    public static double[] GRIPPER_ROTATE_INTAKE_POS = { 0.525, 0.615 } ;  // Min: 0, Max: 1
-    public static double[] GRIPPER_ROTATE_STORE_POS = { 0.469, 0.560 } ;  // Min: 0, Max: 1
-    public static double[] GRIPPER_ROTATE_DELIVER_POS = { 0.488, 0.575 } ;  // Min: 0, Max: 1
-    public static int[] ARM_POSITIONS = { 0, 800, 1000, 1200, 1400, 1660 } ;  // Min: 0, Max: 5
+    public static double[] GRIPPER_ROTATE_INTAKE_POS = { 0.500, 0.405 } ;  // Min: 0, Max: 1
+    public static double[] GRIPPER_ROTATE_STORE_POS = { 0.54, 0.46 } ;  // Min: 0, Max: 1
+    public static double[] GRIPPER_ROTATE_DELIVER_POS = { 0.54, 0.44 } ;  // Min: 0, Max: 1
+    public static int[] ARM_POSITIONS = { 0, 1000, 1200, 1400, 1600, 1850 } ;  // Min: 0, Max: 5
     public static int[] LIFT_POSITIONS = { 0, 800, 1000, 1200, 1400, 1850 } ;  // Min: 0, Max: 5
 
     public enum GripperState {STORE, INTAKE, DELIVER }
     public GripperState gripperState = GripperState.STORE ;
 
     // These represent the current target position of each component.
-    public double gripperGripPosition = 0.9 ;
-    public double gripperRotatePosition = 0.469 ;
+    public double gripperGripPosition = 0.5 ;
+    public double gripperRotatePosition = 0.505 ;
     public int armPosition = 0 ;
     public int liftPosition = 0 ;
     public int deliveryLevel = 5 ;
@@ -156,7 +156,7 @@ public class ErikCenterstageRobot {
         gripperRotatePosition = rotateRaw ;
         liftPosition = liftRaw ;
         armPosition = armRaw ;
-        update() ;
+        //update() ;
     }
 
     public void updateInterlock() {

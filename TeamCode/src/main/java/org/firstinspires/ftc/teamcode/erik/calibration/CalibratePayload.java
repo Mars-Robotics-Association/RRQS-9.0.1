@@ -49,8 +49,8 @@ public class CalibratePayload extends OpMode
     // Declare OpMode members.
     public static int LIFT_POSITION  = 0 ;  // Max = 1850
     public static int ARM_POSITION  = 0 ;  // Max = 1660
-    public static double GRIPPER_GRIP_POSITION  = 0.9 ;  // Open=0.9, Close=0.71
-    public static double GRIPPER_ROTATE_POSITION  = 0.525 ;
+    public static double GRIPPER_GRIP_POSITION  = 0.5 ;  // Open=0.9, Close=0.71
+    public static double GRIPPER_ROTATE_POSITION  = 0.505 ;
     ErikCenterstageRobot robot ;
 
 

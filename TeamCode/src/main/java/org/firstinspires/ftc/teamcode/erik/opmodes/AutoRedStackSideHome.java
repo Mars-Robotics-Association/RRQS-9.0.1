@@ -24,7 +24,7 @@ public final class AutoRedStackSideHome extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         ErikCenterstageRobot robot = new ErikCenterstageRobot(this) ;
         MecanumDrive drive = new MecanumDrive(hardwareMap,
-                new Pose2d(-34, 62, Math.PI/2));
+                new Pose2d(-34, 58, Math.PI/2));
 
         // HuskyLens setup stuff
         huskyLens = hardwareMap.get(HuskyLens.class, "huskyLens");
@@ -38,10 +38,13 @@ public final class AutoRedStackSideHome extends LinearOpMode {
         //huskyLens.selectAlgorithm(HuskyLens.Algorithm.TAG_RECOGNITION);
         huskyLens.selectAlgorithm(HuskyLens.Algorithm.COLOR_RECOGNITION) ;
 
-        robot.gripAndStore();
+        robot.gripperState = ErikCenterstageRobot.GripperState.INTAKE ;
+        robot.update();
+
 
         waitForStart();
 
+        robot.gripAndStore();
 
 
         rateLimit.reset();
@@ -93,7 +96,7 @@ public final class AutoRedStackSideHome extends LinearOpMode {
                 break ;
         }
 
-/*
+
 
         robot.armRaise() ;
 
@@ -116,7 +119,7 @@ public final class AutoRedStackSideHome extends LinearOpMode {
 
 
 
- */
+
         while(this.opModeIsActive()) {}
     }
 
