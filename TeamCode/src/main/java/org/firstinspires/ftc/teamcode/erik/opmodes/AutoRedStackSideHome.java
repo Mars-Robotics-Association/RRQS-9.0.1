@@ -37,15 +37,12 @@ public final class AutoRedStackSideHome extends LinearOpMode {
         }
         //huskyLens.selectAlgorithm(HuskyLens.Algorithm.TAG_RECOGNITION);
         huskyLens.selectAlgorithm(HuskyLens.Algorithm.COLOR_RECOGNITION) ;
-
         robot.gripperState = ErikCenterstageRobot.GripperState.INTAKE ;
         robot.update();
-
 
         waitForStart();
 
         robot.gripAndStore();
-
 
         rateLimit.reset();
         HuskyLens.Block[] blocks = huskyLens.blocks();

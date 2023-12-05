@@ -99,4 +99,6 @@ public final class TwoDeadWheelLocalizer implements Localizer {
 
         return twist;
     }
+
+    public void setLastHeading(double newHeading) { lastHeading = Rotation2d.exp(newHeading) ; }
 }

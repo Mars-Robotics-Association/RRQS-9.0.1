@@ -27,7 +27,6 @@ public final class AutoRedStackSide extends LinearOpMode {
         ErikCenterstageRobot robot = new ErikCenterstageRobot(this) ;
         MecanumDrive drive = new MecanumDrive(hardwareMap,
                 new Pose2d(-34, 62, Math.PI/2));
-
         // HuskyLens setup stuff
         huskyLens = hardwareMap.get(HuskyLens.class, "huskyLens");
         Deadline rateLimit = new Deadline(READ_PERIOD, TimeUnit.SECONDS);
