@@ -69,6 +69,7 @@ public class ErikCenterstageRobot {
     public void update() {
         gripperRotatePosition = calcGripperRotationLive() ;  // Calculate rotation based on state and CURRENT arm position
         updatePayload() ;
+        drive.updatePoseEstimate() ;
     }
 
     // Support methods =========================================================================

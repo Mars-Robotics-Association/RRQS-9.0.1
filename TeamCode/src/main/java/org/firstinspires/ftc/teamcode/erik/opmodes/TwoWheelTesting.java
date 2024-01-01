@@ -3,40 +3,31 @@ package org.firstinspires.ftc.teamcode.erik.opmodes;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
-import com.qualcomm.hardware.dfrobot.HuskyLens;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import org.firstinspires.ftc.robotcore.internal.system.Deadline;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.erik.ErikCenterstageRobot;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 
-@TeleOp(name="Auto Red Stack Side - Home", group="Erik CenterStage")
-public final class AutoRedStackSideHome extends LinearOpMode {
+@TeleOp(name="Two Wheel Testing", group="Erik CenterStage")
+public final class TwoWheelTesting extends LinearOpMode {
     private final int READ_PERIOD = 1;
     private String myZone = "Center" ;
 
 
     // -------------- TensorFlow Object Detection Setup ------------------
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
-    // TFOD_MODEL_ASSET points to a model file stored in the project Asset location,
-    // this is only used for Android Studio when using models in Assets.
     private static final String TFOD_MODEL_ASSET = "model_with_metadata.tflite";
-    // TFOD_MODEL_FILE points to a model file stored onboard the Robot Controller's storage,
-    // this is used when uploading models directly to the RC using the model upload interface.
-    private static final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/RedSample.tflite";
-    // Define the labels recognized in the model for TFOD (must be in training order!)
     private static final String[] LABELS = {
-            "Duck", "???"
+            "UFO", "???"
     };
     // The variable to store our instance of the TensorFlow Object Detection processor.
     private TfodProcessor tfod;
@@ -49,49 +40,47 @@ public final class AutoRedStackSideHome extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         ErikCenterstageRobot robot = new ErikCenterstageRobot(this) ;
         MecanumDrive drive = new MecanumDrive(hardwareMap,
-                new Pose2d(-34, 58, Math.PI/2));
-
+                new Pose2d(-34, 58, Math.toRadians(90)));
 
         robot.gripperState = ErikCenterstageRobot.GripperState.INTAKE ;
         robot.update();
 
+        initTfod();
+
         waitForStart();
         // ================= OpMode Started ======================================
 
-        robot.gripAndStore();
-
-
-
+        robot.gripAndStore() ;
+        int myZone = tfodDetect() ;
 
 
         switch (myZone) {
-            case "Right":
+            case 2: // Right
                 Actions.runBlocking(
                         drive.actionBuilder(drive.pose)
                             .setReversed(true)
-                            .splineTo(new Vector2d(-42, 32), Math.toRadians(-120))
+                            .splineTo(new Vector2d(-42, 30), Math.toRadians(-120))
                             .setReversed(false)
-                            .splineTo(new Vector2d(-20, 58), Math.toRadians(0))
+                            .splineTo(new Vector2d(-42, 42), Math.toRadians(180))
                             .build());
                 break ;
-            case "Left":
+            case 0: // Left
                 Actions.runBlocking(
                         drive.actionBuilder(drive.pose)
-                                .setReversed(true)
-                                .splineTo(new Vector2d(-27, 32), Math.toRadians(-60))
-                                .setReversed(false)
-                                .splineTo(new Vector2d(-34, 42), Math.toRadians(80))
-                                .splineTo(new Vector2d(-20, 58), Math.toRadians(0))
-                                .build());
+                            .setReversed(true)
+                            .splineTo(new Vector2d(-27, 30), Math.toRadians(-60))
+                            .setReversed(false)
+                            .splineTo(new Vector2d(-42, 42), Math.toRadians(180))
+                            .build());
                 break ;
-            default:
+            default: // Center, default
                 Actions.runBlocking(
                         drive.actionBuilder(drive.pose)
-                                .setReversed(true)
-                                .splineTo(new Vector2d(-34, 32), Math.toRadians(-90))
-                                .setReversed(false)
-                                .splineTo(new Vector2d(-20, 58), Math.toRadians(0))
-                                .build());
+                            .setReversed(true)
+                            .splineTo(new Vector2d(-34, 30), Math.toRadians(-90))
+                            .setReversed(false)
+                            .splineTo(new Vector2d(-42, 42), Math.toRadians(180))
+                            .build());
                 break ;
         }
 
@@ -198,21 +187,26 @@ public final class AutoRedStackSideHome extends LinearOpMode {
      * Add telemetry about TensorFlow Object Detection (TFOD) recognitions.
      */
     private void telemetryTfod() {
-
         List<Recognition> currentRecognitions = tfod.getRecognitions();
         telemetry.addData("# Objects Detected", currentRecognitions.size());
-
         // Step through the list of recognitions and display info for each one.
         for (Recognition recognition : currentRecognitions) {
             double x = (recognition.getLeft() + recognition.getRight()) / 2 ;
             double y = (recognition.getTop()  + recognition.getBottom()) / 2 ;
-
             telemetry.addData(""," ");
             telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);
             telemetry.addData("- Position", "%.0f / %.0f", x, y);
             telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
         }   // end for() loop
-
     }   // end method telemetryTfod()
 
+    private int tfodDetect() {
+        List<Recognition> currentRecognitions = tfod.getRecognitions();
+        if (currentRecognitions.size()>0) {
+            double x = currentRecognitions.get(0).getLeft() + currentRecognitions.get(0).getRight() / 2 ;
+            if (x>300) return 0 ;
+            else if (x<100) return 2 ;
+        }
+        return 1 ;
+    }
 }

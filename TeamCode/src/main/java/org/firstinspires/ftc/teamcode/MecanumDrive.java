@@ -39,6 +39,8 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.RoadRunner.Localizer;
+import org.firstinspires.ftc.teamcode.RoadRunner.PoseMessage;
 
 import java.lang.Math;
 import java.util.Arrays;
@@ -49,14 +51,14 @@ import java.util.List;
 public final class MecanumDrive {
     public static class Params {
         // drive model parameters
-        public double inPerTick = 0.0005318 ;
-        public double lateralInPerTick = 0.0005318 ;
-        public double trackWidthTicks = 19230.87526296029;  // Derived 19230.87526296029
+        public double inPerTick = 0.0029546 ;
+        public double lateralInPerTick = 0.0029546 ;
+        public double trackWidthTicks = 3456.5967932338294;  // Derived 19230.87526296029
 
         // feedforward parameters (in tick units)
-        public double kS = 0.8505607819079453;
-        public double kV = 0.00010574967196060701; // 0.000090749 seems a lot better
-        public double kA = 0.00002;
+        public double kS = 0.845812;   // Derived= 0.8756376330963875   Manual= 1.8
+        public double kV = 0.0006060282; // Derived= 0.000613783126604407  Manual= 0.00034
+        public double kA = 0.0002;
 
         // path profile parameters (in inches)
         public double maxWheelVel = 50;
@@ -68,12 +70,12 @@ public final class MecanumDrive {
         public double maxAngAccel = Math.PI;
 
         // path controller gains
-        public double axialGain = 1.2;  // x (forward/backward)
-        public double lateralGain = 5.0;
-        public double headingGain = 1.8; // shared with turn
+        public double axialGain = 1.5;  // x (forward/backward)
+        public double lateralGain = 6;
+        public double headingGain = 10 ; // shared with turn
 
         public double axialVelGain = 0.1;
-        public double lateralVelGain = 1.8;
+        public double lateralVelGain = 2.5;
         public double headingVelGain = 0.5; // shared with turn
     }
 
@@ -187,14 +189,15 @@ public final class MecanumDrive {
         rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
 
         imu = hardwareMap.get(IMU.class, "imu");
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
                 RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
                 RevHubOrientationOnRobot.UsbFacingDirection.UP));
         imu.initialize(parameters);
+        imu.resetYaw();
 
         voltageSensor = hardwareMap.voltageSensor.iterator().next();
 

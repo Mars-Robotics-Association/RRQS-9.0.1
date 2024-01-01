@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.erik.opmodes;
+package org.firstinspires.ftc.teamcode.erik.templates;
 
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
@@ -14,8 +14,8 @@ import org.firstinspires.ftc.teamcode.erik.ErikCenterstageRobot;
 import java.util.concurrent.TimeUnit;
 
 
-@TeleOp(name="Auto Red Stack Side - Home", group="Erik CenterStage")
-public final class AutoRedStackSideHome extends LinearOpMode {
+@TeleOp(name="HuskyLens Auto-Red - Home", group="Erik CenterStage")
+public final class AutoHuskyLens extends LinearOpMode {
     private final int READ_PERIOD = 1;
     private String myZone = "Center" ;
     private HuskyLens huskyLens;

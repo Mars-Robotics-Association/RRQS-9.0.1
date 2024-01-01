@@ -60,24 +60,12 @@ public class MeepMeepTesting {
 
 
         // ======== For full-size field ====== With regular turn
-        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-34, 62, Math.PI/2))
+        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-34, 62, Math.toRadians(90)))
                 .setReversed(true)
-                .splineTo(new Vector2d(-44, 32), Math.toRadians(-120))
+                .splineTo(new Vector2d(-42, 30), Math.toRadians(-120))
                 .setReversed(false)
-                .splineTo(new Vector2d(-16, 58), Math.toRadians(0))
-                .splineTo(new Vector2d(0, 58), Math.toRadians(0))
-
-                .splineTo(new Vector2d(48, 36), Math.toRadians(0))
-                .waitSeconds(0.5)
-
-                .setReversed(true)
-                .splineTo(new Vector2d(0, 58), Math.toRadians(-180))
-                .splineTo(new Vector2d(-26, 58), Math.toRadians(-180))
-                .splineTo(new Vector2d(-48, 36), Math.toRadians(-180))
-                .turnTo(0)
-                .setReversed(false)
-                .turn(Math.toRadians(180))
-                .splineTo(new Vector2d(-57, 36), Math.toRadians(-180))
+                .splineTo(new Vector2d(-42, 58), Math.toRadians(180))
+                .splineTo(new Vector2d(-56, 40), Math.toRadians(-90))
                 .build());
 
 
