@@ -4,19 +4,20 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.hardware.dfrobot.HuskyLens;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.internal.system.Deadline;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.erik.ErikCenterstageRobot;
-import com.qualcomm.hardware.dfrobot.HuskyLens;
 
 import java.util.concurrent.TimeUnit;
 
 
-@TeleOp(name="Auto Red Stack Side", group="Erik CenterStage")
-public final class AutoRedStackSide extends LinearOpMode {
+@TeleOp(name="Old Red Stack Side", group="Erik CenterStage")
+@Disabled
+public final class OldRedStackSide extends LinearOpMode {
     private final int READ_PERIOD = 1;
     private String myZone = "Center" ;
     private double zoneY = 36 ;

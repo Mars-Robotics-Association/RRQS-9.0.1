@@ -27,14 +27,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.erik;
+package org.firstinspires.ftc.teamcode.erik.templates;
 
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.hardware.I2cDeviceSynch ;
+
+import org.firstinspires.ftc.teamcode.erik.ErikCenterstageRobot;
 
 /**
  * This file contains an example of an iterative (Non-Linear) "OpMode".
@@ -44,6 +47,7 @@ import com.qualcomm.robotcore.hardware.I2cDeviceSynch ;
  * class is instantiated on the Robot Controller and executed.
  */
 @TeleOp(name="PixyCam Test", group="Erik CenterStage")
+@Disabled
 public class PixyCamTest extends OpMode
 {
     // Declare OpMode members.

@@ -18,7 +18,7 @@ import java.util.List;
 
 
 @TeleOp(name="Two Wheel Testing", group="Erik CenterStage")
-public final class TwoWheelTesting extends LinearOpMode {
+public final class AutoRedFrontStage extends LinearOpMode {
     private final int READ_PERIOD = 1;
     private String myZone = "Center" ;
 
@@ -176,7 +176,7 @@ public final class TwoWheelTesting extends LinearOpMode {
 
         // Set confidence threshold for TFOD recognitions, at any time.
         //tfod.setMinResultConfidence(0.85f);
-        tfod.setMinResultConfidence(0.65f);
+        tfod.setMinResultConfidence(0.85f);
 
         // Disable or re-enable the TFOD processor at any time.
         //visionPortal.setProcessorEnabled(tfod, true);
@@ -204,8 +204,8 @@ public final class TwoWheelTesting extends LinearOpMode {
         List<Recognition> currentRecognitions = tfod.getRecognitions();
         if (currentRecognitions.size()>0) {
             double x = currentRecognitions.get(0).getLeft() + currentRecognitions.get(0).getRight() / 2 ;
-            if (x>300) return 0 ;
-            else if (x<100) return 2 ;
+            if (x>400) return 2 ;
+            else if (x<200) return 0 ;
         }
         return 1 ;
     }

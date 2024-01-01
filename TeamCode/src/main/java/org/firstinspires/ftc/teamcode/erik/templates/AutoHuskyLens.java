@@ -4,6 +4,7 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.hardware.dfrobot.HuskyLens;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -15,6 +16,7 @@ import java.util.concurrent.TimeUnit;
 
 
 @TeleOp(name="HuskyLens Auto-Red - Home", group="Erik CenterStage")
+@Disabled
 public final class AutoHuskyLens extends LinearOpMode {
     private final int READ_PERIOD = 1;
     private String myZone = "Center" ;
