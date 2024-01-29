@@ -20,25 +20,29 @@ public class MeepMeepFieldMulti {
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 13)
                 .setColorScheme(new ColorSchemeRedDark())
+                .setDimensions(15,15)
                 .build();
         RoadRunnerBotEntity redBot2 = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 13)
                 .setColorScheme(new ColorSchemeRedLight())
+                .setDimensions(15,15)
                 .build();
         RoadRunnerBotEntity blueBot1 = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 13)
                 .setColorScheme(new ColorSchemeBlueDark())
+                .setDimensions(15,15)
                 .build();
         RoadRunnerBotEntity blueBot2 = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 13)
                 .setColorScheme(new ColorSchemeBlueLight())
+                .setDimensions(15,15)
                 .build();
 
 
-        blueBot1.runAction(blueBot1.getDrive().actionBuilder(new Pose2d(-34, 62, Math.toRadians(90)))
+        blueBot1.runAction(blueBot1.getDrive().actionBuilder(new Pose2d(-36, 64, Math.toRadians(90)))
                 .setReversed(true)
                 .splineTo(new Vector2d(-44, 32), Math.toRadians(-120))  // To the spike mark
                 .setReversed(false)
@@ -53,7 +57,7 @@ public class MeepMeepFieldMulti {
                 .splineTo(new Vector2d(52, 13), Math.toRadians(-45))  // Go under bridge
                 .build());
 
-        blueBot2.runAction(blueBot2.getDrive().actionBuilder(new Pose2d(12, 62, Math.toRadians(90)))
+        blueBot2.runAction(blueBot2.getDrive().actionBuilder(new Pose2d(12, 64, Math.toRadians(90)))
                 .setReversed(true)
                 .splineTo(new Vector2d(4, 32), Math.toRadians(-120))  // To the spike mark
                 .setReversed(false)
@@ -64,7 +68,7 @@ public class MeepMeepFieldMulti {
                 .splineTo(new Vector2d(52, 58), Math.toRadians(0))  // Go under bridge
                 .build());
 
-        redBot1.runAction(redBot1.getDrive().actionBuilder(new Pose2d(-34, -62, Math.toRadians(-90)))
+        redBot1.runAction(redBot1.getDrive().actionBuilder(new Pose2d(-36, -64, Math.toRadians(-90)))
                 .setReversed(true)
                 .splineTo(new Vector2d(-44, -32), Math.toRadians(120))  // To the spike mark
                 .setReversed(false)
@@ -79,7 +83,7 @@ public class MeepMeepFieldMulti {
                 .splineTo(new Vector2d(52, -13), Math.toRadians(45))  // Park
                 .build());
 
-        redBot2.runAction(redBot2.getDrive().actionBuilder(new Pose2d(12, -62, Math.toRadians(-90)))
+        redBot2.runAction(redBot2.getDrive().actionBuilder(new Pose2d(12, -64, Math.toRadians(-90)))
                 .setReversed(true)
                 .splineTo(new Vector2d(4, -32), Math.toRadians(120))  // To the spike mark
                 .setReversed(false)

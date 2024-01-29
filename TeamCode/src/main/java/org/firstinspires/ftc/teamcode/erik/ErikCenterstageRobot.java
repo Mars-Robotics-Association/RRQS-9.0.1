@@ -1,6 +1,10 @@
 package org.firstinspires.ftc.teamcode.erik;
 
+import androidx.annotation.NonNull;
+
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -21,10 +25,10 @@ public class ErikCenterstageRobot {
     public static int INTAKE_OFFSET = 100 ;
 
     // These are the constants used by algorithms. You can modify them live in Dashboard.
-    public static double[] GRIPPER_ROTATE_INTAKE_POS = { 0.500, 0.405 } ;  // Min: 0, Max: 1
-    public static double[] GRIPPER_ROTATE_STORE_POS = { 0.54, 0.46 } ;  // Min: 0, Max: 1
-    public static double[] GRIPPER_ROTATE_DELIVER_POS = { 0.54, 0.44 } ;  // Min: 0, Max: 1
-    public static int[] ARM_POSITIONS = { 0, 1000, 1200, 1400, 1600, 1850 } ;  // Min: 0, Max: 5
+    public static double[] GRIPPER_ROTATE_INTAKE_POS = { 0.489, 0.59 } ;  // Min: 0, Max: 1
+    public static double[] GRIPPER_ROTATE_STORE_POS = { 0.45, 0.53 } ;  // Min: 0, Max: 1
+    public static double[] GRIPPER_ROTATE_DELIVER_POS = { 0.455, 0.55 } ;  // Min: 0, Max: 1
+    public static int[] ARM_POSITIONS = { 0, 800, 1100, 1400, 1600, 1850 } ;  // Min: 0, Max: 5
     public static int[] LIFT_POSITIONS = { 0, 800, 1000, 1200, 1400, 1850 } ;  // Min: 0, Max: 5
 
     public enum GripperState {STORE, INTAKE, DELIVER }
@@ -32,7 +36,7 @@ public class ErikCenterstageRobot {
 
     // These represent the current target position of each component.
     public double gripperGripPosition = 0.5 ;
-    public double gripperRotatePosition = 0.505 ;
+    public double gripperRotatePosition = 0.485 ;
     public int armPosition = 0 ;
     public int liftPosition = 0 ;
     public int deliveryLevel = 5 ;
@@ -60,6 +64,7 @@ public class ErikCenterstageRobot {
         gripperGrip = opMode.hardwareMap.get(Servo.class, "gripperGrip") ;
         gripperRotate = opMode.hardwareMap.get(Servo.class, "gripperRotate") ;
 
+        update() ;
 
         opMode.telemetry.addData("Robot Class", "Initialized") ;
     }
@@ -67,7 +72,8 @@ public class ErikCenterstageRobot {
     // Execute this update one per loop in the opMode ==========================================
     // TODO: Because we calculate Gripper Rotation, we MUST run this regularly.
     public void update() {
-        gripperRotatePosition = calcGripperRotationLive() ;  // Calculate rotation based on state and CURRENT arm position
+        //gripperRotatePosition = calcGripperRotationLive() ;  // Calculate rotation based on state and CURRENT arm position
+        gripperRotatePosition = calcGripperRotation() ;  // Calculate rotation based on the DESTINATION arm position
         updatePayload() ;
         drive.updatePoseEstimate() ;
     }
@@ -217,4 +223,22 @@ public class ErikCenterstageRobot {
     }
 
     public boolean IsTimeUp(double startTime, double runTime) { return opMode.getRuntime()<startTime+runTime ; } // From Owen
+
+
+
+    public class RaiseArm implements Action {
+        int targetPosition = 1 ;
+        RaiseArm (int newPosition) { targetPosition = newPosition ; }
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            armRaise(targetPosition) ;
+            return false;
+        }
+
+    }
+    public Action raiseArm(int newPosition) {
+        return new RaiseArm(newPosition) ;
+    }
+
+
 }

@@ -30,6 +30,7 @@
 package org.firstinspires.ftc.teamcode.erik.calibration;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -42,7 +43,7 @@ import org.firstinspires.ftc.teamcode.erik.ErikCenterstageRobot;
  * This OpMode is for finding the values of the positions for the: arm, lift, gripper grip and gripper rotation.
  */
 @TeleOp(name="Calibrate Payload", group="Erik Calibrate")
-//@Disabled
+@Disabled
 @Config
 public class CalibratePayload extends OpMode
 {

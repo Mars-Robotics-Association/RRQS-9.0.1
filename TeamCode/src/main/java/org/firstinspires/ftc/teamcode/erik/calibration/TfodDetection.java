@@ -55,7 +55,7 @@ public class TfodDetection extends LinearOpMode {
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
     // TFOD_MODEL_ASSET points to a model file stored in the project Asset location,
     // this is only used for Android Studio when using models in Assets.
-    private static final String TFOD_MODEL_ASSET = "model_with_metadata.tflite";
+    private static final String TFOD_MODEL_ASSET = "model_20240107_201118.tflite";
     // TFOD_MODEL_FILE points to a model file stored onboard the Robot Controller's storage,
     // this is used when uploading models directly to the RC using the model upload interface.
     private static final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/RedSample.tflite";
@@ -89,7 +89,7 @@ public class TfodDetection extends LinearOpMode {
             while (opModeIsActive()) {
 
                 telemetryTfod();
-
+                telemetry.addData("Prop Position:  ", tfodPropDetect()) ;
                 // Push telemetry to the Driver Station.
                 telemetry.update();
 
@@ -194,7 +194,22 @@ public class TfodDetection extends LinearOpMode {
             telemetry.addData("- Position", "%.0f / %.0f", x, y);
             telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
         }   // end for() loop
-
     }   // end method telemetryTfod()
+
+    private double tfodPropDetect() {
+        double highScore = .70 ;
+        double highX = 310 ;
+        List<Recognition> currentRecognitions = tfod.getRecognitions();
+        for (Recognition recognition : currentRecognitions) {
+            double width = (recognition.getRight() - recognition.getLeft()) ;
+            double height = (recognition.getTop() - recognition.getBottom()) ;
+            if (width<120 && height<120 && recognition.getConfidence()>highScore) {
+                highX = (recognition.getLeft() + recognition.getRight()) / 2 ;
+            }
+        }
+        if (highX<200) return 0 ;
+        else if (highX>400) return 2 ;
+        return 1 ;
+    }
 
 }   // end class
