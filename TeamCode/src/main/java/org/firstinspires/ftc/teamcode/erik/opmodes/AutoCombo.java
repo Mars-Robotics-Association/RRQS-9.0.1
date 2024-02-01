@@ -1,12 +1,12 @@
 package org.firstinspires.ftc.teamcode.erik.opmodes;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
-import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.acmerobotics.dashboard.config.Config;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -19,9 +19,9 @@ import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 import java.util.List;
 
 
-@TeleOp(name="Blue-BackStage", group="Erik CenterStage")
+@TeleOp(name="Auto-Combo", group="Erik CenterStage")
 @Config
-public final class AutoBlueBackStage extends LinearOpMode {
+public final class AutoCombo extends LinearOpMode {
     private final int READ_PERIOD = 1;
     private String myZone = "Center" ;
     private ErikCenterstageRobot robot ;
@@ -36,97 +36,111 @@ public final class AutoBlueBackStage extends LinearOpMode {
     // The variable to store our instance of the TensorFlow Object Detection processor.
     private TfodProcessor tfod;
     // The variable to store our instance of the vision portal.
-    private VisionPortal visionPortal;
+    private VisionPortal visionPortal;  // Not used for my TFOD code.
     // --------------- End TFOD declarations ---------------------------
+
+    // ------------- Autonomous Variables ---------------------
+    public static boolean BLUE = true ;
+    public static boolean BACKSTAGE = true ;
+    public static double FRONTSTAGE_X = -36 ;
+    public static double BACKSTAGE_X = 12 ;
+    public static double START_Y = 62 ;
+    public static double PURPLE_RELEASE_X_DELTA = 5 ;
+    public static double YELLOW_RELEASE_Y_DELTA = 6 ;
+    public static int colorModifier = 1 ;  // 1 = Blue, -1 = Red
 
 
     @Override
     public void runOpMode() throws InterruptedException {
-        robot = new ErikCenterstageRobot(this) ;
-        MecanumDrive drive = new MecanumDrive(hardwareMap,
-                new Pose2d(12, 62, Math.toRadians(90)));
+        // ------------ Derived Autonomous settings ------------------
+        double startX = (BACKSTAGE ? BACKSTAGE_X : FRONTSTAGE_X) ;  // Set the starting X coordinate based on back/front stage
+        double purpleReleaseX = startX ;
+        double purpleReleaseY = 34 ;
+        double purpleReleaseAngle = -90 ;
+        double yellowReleaseY = 36 ;
+        colorModifier = (BLUE ? 1 : -1) ;
+        TranslationalVelConstraint slow = new TranslationalVelConstraint(15) ;
 
-        robot.gripperState = ErikCenterstageRobot.GripperState.STORE ;
-        robot.update();
+        robot = new ErikCenterstageRobot(this, new Pose2d(startX, START_Y*colorModifier, Math.toRadians(90)*colorModifier)) ;
+
+        // TODO: *** Use the drive in the robot class ***
+        //MecanumDrive drive = new MecanumDrive(hardwareMap,
+        //        new Pose2d(startX, START_Y, Math.toRadians(90)));
+
+        //robot.gripperState = ErikCenterstageRobot.GripperState.STORE ;
+        //robot.update();
         robot.gripAndStore() ;
 
         initTfod();
 
         waitForStart();
+        robot.gripAndStore() ;
+
         // ================= OpMode Started ======================================
 
-        //int myZone = tfodPropDetect() ;
-        int myZone = DEFAULT_ZONE ;
+        if (this.opModeIsActive()) {
 
-        // ============ Place Purple Pixel on spike mark =======================
-        switch (myZone) {
-            case 2: // Right
+            //int myZone = tfodPropDetect() ;
+            int myZone = DEFAULT_ZONE;
+
+            switch (myZone) {
+                case 2: // Right
+                    purpleReleaseX = startX - PURPLE_RELEASE_X_DELTA  * colorModifier ;
+                    purpleReleaseY = 36 * colorModifier ;
+                    purpleReleaseAngle = -90 * colorModifier - 45 ;
+                    yellowReleaseY = 36 * colorModifier - YELLOW_RELEASE_Y_DELTA  ;
+                    break;
+                case 0: // Left
+                    purpleReleaseX = startX + PURPLE_RELEASE_X_DELTA * colorModifier ;
+                    purpleReleaseY = 36 * colorModifier ;
+                    purpleReleaseAngle = -90 * colorModifier + 45;
+                    yellowReleaseY = 36 * colorModifier + YELLOW_RELEASE_Y_DELTA ;
+                    break;
+                default: // 1: Center, Default
+                    purpleReleaseX = startX ;
+                    purpleReleaseY = 34 * colorModifier ;
+                    purpleReleaseAngle = -90 * colorModifier ;
+                    yellowReleaseY = 36 * colorModifier;
+                    break;
+            }
+
+            // ==================== Place Purple Pixel on spike mark =======================
+            Actions.runBlocking(
+                    robot.drive.actionBuilder(robot.drive.pose)
+                            .setReversed(true)
+                            .splineTo(new Vector2d(startX, 48  * colorModifier), Math.toRadians(-90) * colorModifier)
+                            .splineTo(new Vector2d(purpleReleaseX, purpleReleaseY ), Math.toRadians(purpleReleaseAngle), slow)
+                            .setReversed(false)
+                            //.splineTo(new Vector2d(startX, 42 * colorModifier), Math.toRadians(90) * colorModifier)
+                            .splineTo(new Vector2d(startX + (BACKSTAGE ? 12 : -12), 48 * colorModifier), Math.toRadians((BACKSTAGE ? 0 : 180)), slow)
+                            .build());
+
+            // ---------------------- Frontstage additional driving ---------------------
+            if (!BACKSTAGE) {
                 Actions.runBlocking(
-                        drive.actionBuilder(drive.pose)
-                                .setReversed(true)
-                                .splineTo(new Vector2d(7, 36), Math.toRadians(-140))
-                                .stopAndAdd( robot.raiseArm(1) )
-                                .setReversed(false)
-                                .splineTo(new Vector2d(33, 30), Math.toRadians(0))
-                                .splineTo(new Vector2d(45, 30), Math.toRadians(0))
+                        robot.drive.actionBuilder(robot.drive.pose)
+                                .splineTo(new Vector2d(startX-22, 34 * colorModifier), Math.toRadians(-90) * colorModifier)
+                                .splineTo(new Vector2d(startX, 12 * colorModifier), Math.toRadians(0) )
+                                .splineTo(new Vector2d(24, 13 * colorModifier), Math.toRadians(0) )
                                 .build());
-                break ;
-            case 0: // Left
-                Actions.runBlocking(
-                        drive.actionBuilder(drive.pose)
-                                .setReversed(true)
-                                .splineTo(new Vector2d(19, 34), Math.toRadians(-60))
-                                .stopAndAdd( robot.raiseArm(1) )
-                                .setReversed(false)
-                                .splineTo(new Vector2d(33, 42), Math.toRadians(0))
-                                .splineTo(new Vector2d(45, 42), Math.toRadians(0))
-                                .build());
-                break ;
-            default: // 1: Center, default
-                Actions.runBlocking(
-                        drive.actionBuilder(drive.pose)
-                                .setReversed(true)
-                                .splineTo(new Vector2d(12, 35), Math.toRadians(-90))
-                                .stopAndAdd( robot.raiseArm(1) )
-                                .setReversed(false)
-                                .splineTo(new Vector2d(33, 36), Math.toRadians(0))
-                                .splineTo(new Vector2d(45, 36), Math.toRadians(0))
-                                .build());
-                break ;
+            }
+
+            robot.armRaise(1);
+            // ===================== Place Yellow Pixel on backdrop =======================
+            Actions.runBlocking(
+                    robot.drive.actionBuilder(robot.drive.pose)
+                            .splineTo(new Vector2d(45, yellowReleaseY ), Math.toRadians(0), slow)
+                            .build());
+
+            robot.releaseAndDrop();
+            // ===================== Leave backdrop and park ==============================
+            Actions.runBlocking(
+                    robot.drive.actionBuilder(robot.drive.pose)
+                            .setReversed(true)
+                            .splineTo(new Vector2d(36, (BACKSTAGE ? 48 : 24) * colorModifier), Math.toRadians(BACKSTAGE ? 90 : -90) * colorModifier)
+                            .splineTo(new Vector2d(54, (BACKSTAGE ? 60 : 13) * colorModifier), Math.toRadians(0))
+                            .build());
         }
-
-
-        // ============ Leave backdrop ========================================
-        robot.releaseAndDrop();
-        Actions.runBlocking(
-                drive.actionBuilder(drive.pose)
-                        .setReversed(true)
-                        .splineTo(new Vector2d(36, 48), Math.toRadians(90))
-                        .splineTo(new Vector2d(50, 60), Math.toRadians(0))
-                        .build());
-
-
-
-/*
-        Actions.runBlocking(
-            drive.actionBuilder(drive.pose)
-                .splineTo(new Vector2d(48, 36), Math.toRadians(0))
-                .waitSeconds(0.5)
-                .build());
-
-        robot.releaseAndDrop();
-
-        Actions.runBlocking(
-            drive.actionBuilder(drive.pose)
-                .setReversed(true)
-                .splineTo(new Vector2d(-20, 58), Math.toRadians(-180))
-                .splineToLinearHeading(new Pose2d(-46, 42, Math.toRadians(-160)), Math.toRadians(0))
-                .setReversed(false)
-                .splineTo(new Vector2d(-56, 36), Math.toRadians(-180))
-                .build());
- */
-
-
 
         while(this.opModeIsActive()) {
 

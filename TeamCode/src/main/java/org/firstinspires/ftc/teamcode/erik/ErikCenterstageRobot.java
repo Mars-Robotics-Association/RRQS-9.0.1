@@ -20,7 +20,7 @@ public class ErikCenterstageRobot {
     private OpMode opMode ;
     public MecanumDrive drive ;
 
-    public static double GRIPPER_CLOSE  = 0.7 ;
+    public static double GRIPPER_CLOSE  = 0.6 ;
     public static double GRIPPER_OPEN  = 0.5 ;
     public static int INTAKE_OFFSET = 100 ;
 
@@ -42,11 +42,15 @@ public class ErikCenterstageRobot {
     public int deliveryLevel = 5 ;
     public int intakeLevel = 0 ;
 
-
     // Execute this constructor during the init phase of the opMode ============================
+    // It's overloaded to allow us to set the pose or not.
     public ErikCenterstageRobot(OpMode newOpMode) {
+        this(newOpMode, new Pose2d(0,0,0));
+    }
+
+    public ErikCenterstageRobot(OpMode newOpMode, Pose2d newPose) {
         opMode = newOpMode ;
-        drive = new MecanumDrive(opMode.hardwareMap, new Pose2d(0, 0, 0)) ;
+        drive = new MecanumDrive(opMode.hardwareMap, newPose) ;
         liftMotor = opMode.hardwareMap.get(DcMotor.class, "liftMotor") ;
         //liftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER) ;
